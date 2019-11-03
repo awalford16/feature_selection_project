@@ -12,7 +12,7 @@ def main():
     dp.remove_null_values(heart)
 
     # Split the data into train and test data
-    data_train, data_test, target_train, target_test = dp.split_data(heart.loc[:, heart.columns != 'target'], heart['target'], 0.25)
+    data_train, data_test, target_train, target_test = dp.split_data(heart, 'target', 0.25)
 
 
 if __name__ == "__main__":
