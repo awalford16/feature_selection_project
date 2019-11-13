@@ -1,7 +1,7 @@
-import pandas as pd
 import read_data
 import os
 import preprocessing.data_preprocessing as dp
+from feature_selection import filter_selection
 
 def main():
     # Read heart disease data into dataframe
@@ -13,6 +13,8 @@ def main():
 
     # Update values in target field to only include 0 or 1
     dp.replace_target_values(heart)
+
+    filter_selection.pearson_correlation(heart)
 
     # Split the data into train and test data
     data_train, data_test, target_train, target_test = dp.split_data(heart, 'target', 0.25)
