@@ -11,6 +11,9 @@ def main():
     # Remove any null values from the data
     dp.remove_null_values(heart)
 
+    # Update values in target field to only include 0 or 1
+    dp.replace_target_values(heart)
+
     # Split the data into train and test data
     data_train, data_test, target_train, target_test = dp.split_data(heart, 'target', 0.25)
 

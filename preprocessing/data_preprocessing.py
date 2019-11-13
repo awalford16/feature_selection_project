@@ -17,3 +17,12 @@ def remove_null_values(data):
     # Remove null values found in columns and rows from dataset
     print("Found {} null values within dataset.".format(data.isnull().sum().sum()))
     return data.dropna(axis=0)
+
+# Heart disease target contains 5 different values. Need to replace with either 0 or 1
+def replace_target_values(data):
+    for i, target in enumerate(data.target):
+        # if the target is 1, 2, 3 or 4 replace with 1
+        if target > 0:
+            data.replace({'target': i}, 1)
+
+    return data
