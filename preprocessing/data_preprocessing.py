@@ -11,12 +11,23 @@ def split_data(data, target_name, split):
 
     split_percent = int(split * 100)
     print('Splitting data into {}% train and {}% test'.format(100 - split_percent, split_percent))
-    return train_test_split(feature_data, target, test_size=split)
+    
+    train = data[int(len(data) * split):]
+    test = data[:int(len(data) * split)]
+
+    print(len(train))
+    print(len(test))
+
+    return train, test
+    
+    #return train_test_split(feature_data, target, test_size=split)
+
 
 def remove_null_values(data):
     # Remove null values found in columns and rows from dataset
     print("Found {} null values within dataset.".format(data.isnull().sum().sum()))
     return data.dropna(axis=0)
+
 
 # Heart disease target contains 5 different values. Need to replace with either 0 or 1
 def replace_target_values(data):

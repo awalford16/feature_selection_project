@@ -14,10 +14,14 @@ def main():
     # Update values in target field to only include 0 or 1
     dp.replace_target_values(heart)
 
-    filter_selection.pearson_correlation(heart)
-
     # Split the data into train and test data
-    data_train, data_test, target_train, target_test = dp.split_data(heart, 'target', 0.25)
+    data_train, data_test  = dp.split_data(heart, 'target', 0.25)
+    
+
+    print("---------- Filter Feature Selection ----------")
+    # Pearson correlation
+    filter_subset = filter_selection.pearson_correlation(data_train, 0.4)
+    print(filter_subset)
 
 
 if __name__ == "__main__":
