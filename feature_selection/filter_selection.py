@@ -11,9 +11,9 @@ def pearson_correlation(data, c):
     get_pc_graph(corr, names)
 
     # identify correlations with output variable
-    target = corr['target'][:]
+    target = corr['target'][:-1]
 
-    return target[abs(target) > c]
+    return target[(abs(target) > c)]
 
 def get_pc_graph(corr, names):
     # Plot matrix
