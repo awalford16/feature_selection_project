@@ -1,10 +1,14 @@
 import matplotlib.pyplot as plt
+import sklearn.feature_selection as fs
 import pandas as pd
 import numpy as np
 
 # Pearson correlation code available from: https://machinelearningmastery.com/visualize-machine-learning-data-python-pandas/
 
-def pearson_correlation(data, target_name, c):
+def pearson_correlation(data, target_data, target_name, c):
+    # Merge data and target data into same dataframe
+    data[target_name] = target_data.values
+
     # get correlations between data features
     corr = data.corr()
     names = list(data.columns)
@@ -27,3 +31,8 @@ def get_pc_graph(corr, names):
     ax.set_xticklabels(names, rotation=90)
     ax.set_yticklabels(names)
     plt.show()
+
+# VAriance filter selection
+def variance_selection(data, threshold):
+    selector = fs.VarianceThreshold(threshold=threshold)
+    return selector.fit_transform(data)
