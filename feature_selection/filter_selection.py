@@ -4,14 +4,14 @@ import numpy as np
 
 # Pearson correlation code available from: https://machinelearningmastery.com/visualize-machine-learning-data-python-pandas/
 
-def pearson_correlation(data, c):
+def pearson_correlation(data, target_name, c):
     # get correlations between data features
     corr = data.corr()
     names = list(data.columns)
     get_pc_graph(corr, names)
 
     # identify correlations with output variable
-    target = corr['target'][:-1]
+    target = corr[target_name][:-1]
 
     return target[(abs(target) > c)]
 
