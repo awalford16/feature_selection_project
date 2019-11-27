@@ -15,8 +15,8 @@ def pearson_correlation(data, c):
 
     return target[(abs(target) > c)]
 
+# Plot pearson correlation
 def get_pc_graph(corr, names):
-    # Plot matrix
     figure = plt.figure()
     ax = figure.add_subplot(111)
     cax = ax.matshow(corr, vmin=-1, vmax=1)
@@ -24,6 +24,6 @@ def get_pc_graph(corr, names):
     ticks = np.arange(0,14,1)
     ax.set_xticks(ticks)
     ax.set_yticks(ticks)
-    ax.set_xticklabels(names)
+    ax.set_xticklabels(names, rotation=90)
     ax.set_yticklabels(names)
     plt.show()
