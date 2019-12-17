@@ -17,6 +17,7 @@ def pearson_correlation(data, target_data, target_name, c):
     # identify correlations with output variable
     target = corr[target_name][:-1]
 
+    # Return columns with values greater than required correlation
     return target[(abs(target) > c)]
 
 # Plot pearson correlation
