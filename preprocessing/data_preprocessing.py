@@ -12,19 +12,11 @@ def split_data(data, target_name, split):
     split_percent = int(split * 100)
     print('Splitting data into {}% train and {}% test'.format(100 - split_percent, split_percent))
     
-    # train = data[int(len(data) * split):]
-    # test = data[:int(len(data) * split)]
+    train_x, test_x, train_y, test_y = train_test_split(feature_data, target, test_size=split)
+    return train_x, test_x, train_y, test_y 
 
-    # print(len(train))
-    # print(len(test))
-
-    # return train, test
-    
-    return train_test_split(feature_data, target, test_size=split)
-
-
+# Remove null values found in columns and rows from dataset
 def remove_null_values(data):
-    # Remove null values found in columns and rows from dataset
     print("Found {} null values within dataset.".format(data.isnull().sum().sum()))
     return data.dropna(axis=0)
 

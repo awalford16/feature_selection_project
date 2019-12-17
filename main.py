@@ -1,7 +1,7 @@
 import read_data
 import os
 import preprocessing.data_preprocessing as dp
-from feature_selection import filter_selection
+from feature_selection.filter_selection import FeatureSelection
 
 def main():
     # Read heart disease data into dataframe
@@ -15,23 +15,27 @@ def main():
 
     # Split the data into train and test data
     hx_train, hx_test, hy_train, hy_test  = dp.split_data(heart, 'target', 0.25)
-    cx_train, cx_test, cy_train, cy_test = dp.split_data(cardio, 'cardio', 0.3)
+    cx_train, cx_test, cy_train, cy_test = dp.split_data(cardio, 'cardio', 0.2)
 
 
     print("---------- Filter Feature Selection ----------")
+    # Create FS object
+    fs = FeatureSelection(0.4, 0.5, 0.1)
+    
     # Pearson correlation
     # Pass in target to compare correlation
-    h_correlation = filter_selection.pearson_correlation(hx_train, hy_train, 'target', 0.4)
-    c_correlation = filter_selection.pearson_correlation(cx_train, cy_train, 'cardio', 0.05)
+    h_correlation = fs.pearson_correlation(hx_train, hy_train, 'target')
+    c_correlation = fs.pearson_correlation(cx_train, cy_train, 'cardio')
     print(c_correlation)
 
     # Variance Threshold
     # Only pass in training data without target
-    h_variance = filter_selection.variance_selection(cx_train, 0.5)
-    print(len(h_variance[0]))
+    h_variance = fs.variance_selection(cx_train)
+    print(h_variance.shape)
 
     # Mutual Information
-
+    h_entropy = fs.entropy_selection(hx_train, hy_train)
+    print(h_entropy.head())
 
     print('---------- Cross-Validation ----------')
 
