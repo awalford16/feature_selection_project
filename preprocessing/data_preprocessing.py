@@ -15,6 +15,7 @@ def split_data(data, target_name, split):
     train_x, test_x, train_y, test_y = train_test_split(feature_data, target, test_size=split)
     return train_x, test_x, train_y, test_y 
 
+
 # Remove null values found in columns and rows from dataset
 def remove_null_values(data):
     print("Found {} null values within dataset.".format(data.isnull().sum().sum()))
@@ -28,4 +29,12 @@ def replace_target_values(data):
         if target > 0:
             data.replace({'target': i}, 1)
 
+    return data
+
+
+# Cast columns to category types
+def col_to_cat(data, cols):
+    for col in cols:
+        data[col] = data[col].astype('category')
+    
     return data
