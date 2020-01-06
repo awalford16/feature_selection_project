@@ -15,7 +15,7 @@ def main():
 
     # Cast columns to category type
     heart = dp.col_to_cat(heart, ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal'])
-    cardio = dp.col_to_cat(cardio, ['gender', 'cholesterol', 'gluc'])
+    cardio = dp.col_to_cat(cardio, ['gender', 'cholesterol', 'gluc', 'smoke', 'alco', 'active'])
 
     # Split the data into train and test data
     hx_train, hx_test, hy_train, hy_test  = dp.split_data(heart, 'target', 0.25)
@@ -36,11 +36,10 @@ def main():
     # Variance Threshold
     # Only pass in training data without target
     h_variance = fs.variance_selection(cx_train)
-    #print(h_variance.shape)
 
     # Mutual Information
     h_entropy = fs.entropy_selection(hx_train, hy_train)
-    #print(h_entropy.head())
+
 
     print('---------- Cross-Validation ----------')
 

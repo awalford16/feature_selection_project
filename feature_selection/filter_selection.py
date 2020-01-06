@@ -10,7 +10,6 @@ class FilterSelection:
         self.var_th = variance_threshold
         self.e_th = entropy_threshold
 
-
     # Use data type of each feature to determine which correlation selection method
     def corr_selection(self, data, target_data, target_name):
         # Initialise arrays for different column data types
@@ -48,8 +47,9 @@ class FilterSelection:
         names = list(data.columns)
         
         # Create plot of pearson correlation
-        plt = Plot()
-        plt.plot_pc(corr, names)
+        crr_plt = Plot()
+        crr_plt.plot_pc(corr, names)
+        del crr_plt
 
         # identify correlations with output variable
         target = corr[target_name][:-1]
@@ -63,11 +63,17 @@ class FilterSelection:
         # Calculate chi scores for each feature
         chi = fs.chi2(data, target_data)
 
-        # Use the average chi-score as the the threshold
-        th = np.mean(chi[0])
+        # Store p values in array
+        p_values = pd.Series(chi[1], index = data.columns)
+        print(p_values)
 
-        # Drop features below threshold
-        return self.drop_columns(data, chi[0], th)
+        # Plot p-values to visualise which are more valuable columns
+        chi_plt = Plot()
+        chi_plt.plot_chi(p_values)
+        del chi_plt
+
+        # Drop features below threshold (95% confidence, set alpha = 0.05)
+        return self.drop_columns(data, p_values, 0.05)
         
 
     # Variance filter selection
