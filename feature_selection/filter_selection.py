@@ -65,7 +65,6 @@ class FilterSelection:
 
         # Store p values in array
         p_values = pd.Series(chi[1], index = data.columns)
-        print(p_values)
 
         # Plot p-values to visualise which are more valuable columns
         chi_plt = Plot()
