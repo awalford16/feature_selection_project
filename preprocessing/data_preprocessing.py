@@ -1,40 +1,54 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
+from sklearn.preprocessing import KBinsDiscretizer
 
-def split_data(data, target_name, split):
-    # split the data into test and train
-    feature_data = data.loc[:, data.columns != target_name]
-    target = data[target_name]
+class Data:
+    def __init__(self, data, target):
+        self.data = data
+        self.target_name = target
 
-    if split > 1 or split < 0:
-        raise Exception('Value for split cannot be greater than 1 or less than 0.')
+    # Split the data into train and test portions
+    def split_data(self, split):
+        feature_data = self.data.loc[:, self.data.columns != self.target_name]
+        target = self.data[self.target_name]
 
-    split_percent = int(split * 100)
-    print('Splitting data into {}% train and {}% test'.format(100 - split_percent, split_percent))
-    
-    train_x, test_x, train_y, test_y = train_test_split(feature_data, target, test_size=split)
-    return train_x, test_x, train_y, test_y 
+        if split > 1 or split < 0:
+            raise Exception('Value for split cannot be greater than 1 or less than 0.')
 
-
-# Remove null values found in columns and rows from dataset
-def remove_null_values(data):
-    print("Found {} null values within dataset.".format(data.isnull().sum().sum()))
-    return data.dropna(axis=0)
-
-
-# Heart disease target contains 5 different values. Need to replace with either 0 or 1
-def replace_target_values(data):
-    for i, target in enumerate(data.target):
-        # if the target is 1, 2, 3 or 4 replace with 1
-        if target > 0:
-            data.replace({'target': i}, 1)
-
-    return data
+        split_percent = int(split * 100)
+        print('Splitting data into {}% train and {}% test'.format(100 - split_percent, split_percent))
+        
+        train_x, test_x, train_y, test_y = train_test_split(feature_data, target, test_size=split)
+        return train_x, test_x, train_y, test_y 
 
 
-# Cast columns to category types
-def col_to_cat(data, cols):
-    for col in cols:
-        data[col] = data[col].astype('category')
-    
-    return data
+    # Remove null values found in columns and rows from dataset
+    def remove_null_values(self):
+        print("Found {} null values within dataset.".format(self.data.isnull().sum().sum()))
+        self.data.dropna(axis=0)
+
+
+    # Normalise data to have consistent ranges
+    def normalise(self):
+        data_min = self.data.min()
+        data_max = self.data.max()
+
+        self.data = ((self.data - data_min) / (data_max - data_min))
+
+
+    # Discretize continuous data to nominal data
+    def discretize(self, cols, bins):
+        print('Discretising Continuous Data...')
+        for col in cols:
+            # Create bins to place data
+            disc = KBinsDiscretizer(n_bins=bins, encode='onehot')
+
+            # Split data into bins
+            self.data[col] = disc.fit_transform(self.data[col])
+        
+
+    # Cast columns to category types
+    def col_to_cat(self, cols):
+        for col in cols:
+            self.data[col] = self.data[col].astype('category')
+        
