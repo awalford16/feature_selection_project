@@ -1,13 +1,8 @@
-from feature_selection.filter_selection import FilterSelection
 from sklearn import feature_selection as fs
 import pandas as pd
 from plotting import Plot
 
 class UnivariateSelection:
-    # Initialise Thresholds
-    def __init__(self, min_features):
-        self.k = min_features
-
     # Chi Square Feature Selection
     def chi_square_selection(self, data, target_data):
         # Calculate chi scores for each feature

@@ -1,7 +1,7 @@
 import read_data
 import os
 from preprocessing.data_preprocessing import Data
-from feature_selection.univariate import UnivariateSelection
+from feature_selection.filter_selection import FilterSelection
 from models.forest import Forest
 
 def main():
@@ -31,24 +31,32 @@ def main():
 
     print("---------- Filter Feature Selection ----------")
     # Create FS object
-    fs = UnivariateSelection(7)
+    fs = FilterSelection(7)
 
-    # Variance Threshold
+    # Chi Square
     # Reduce datasets based on the range of data
     print('\nChi-Square Feature Selection...')
-    h_chi = fs.chi_square_selection(hx_train, hy_train)
-    c_chi = fs.chi_square_selection(cx_train, cy_train)
+    h_chi = fs.chi2(hx_train, hy_train)
+    c_chi = fs.chi2(cx_train, cy_train)
 
     print(f'Chi2 Heart Features: {h_chi.columns}')
     print(f'Chi2 Cardio Features: {c_chi.columns}')
 
     # Mutual Information
     print('\nMutual Information Feature Selection...')
-    h_mi = fs.mi_selection(hx_train, hy_train)
-    c_mi = fs.mi_selection(cx_train, cy_train)
+    h_mi = fs.mi(hx_train, hy_train)
+    c_mi = fs.mi(cx_train, cy_train)
 
     print(f'MI Heart Features: {h_mi.columns}')
     print(f'MI Cardio Features: {c_mi.columns}')
+
+    # Minimum Redundancy Maximum Relevance
+    h_mrmr = fs.mrmr(hx_train)
+    c_mrmr = fs.mrmr(cx_train)
+
+    print(f'MRMR Heart Features: {h_mrmr.columns}')
+    print(f'MRMR Cardio Features: {c_mrmr.columns}')
+
 
 
     print('---------- Training with Correlation Data ----------')
