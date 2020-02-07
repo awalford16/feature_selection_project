@@ -17,7 +17,8 @@ class FilterSelection(UnivariateSelection, MultivariateSelection):
         return UnivariateSelection.mi_selection(self, data, target_data)
 
     def rf(self, data, target_data):
-        return MultivariateSelection.relief_f_selection(self, data, target_data)
+        top_features = MultivariateSelection.relief_selection(self, data.to_numpy(), target_data.to_numpy())
+        return data[data.columns[top_features]]
 
     def mrmr(self, data):
         return MultivariateSelection.mrmr_selection(self, data)
