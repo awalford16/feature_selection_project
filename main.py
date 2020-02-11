@@ -1,4 +1,4 @@
-import read_data
+from preprocessing import read_data
 import os
 
 from preprocessing.data_preprocessing import Data
@@ -72,16 +72,15 @@ def main():
 
     print('Using Hybrid Feature Selection...')
     # Option to implement Hybrid feature selection
-    ws = WrapperSelection(5, rf.model)
-    features = ws.forward_select(d1_chi, d1_y_train)
+    # ws = WrapperSelection(5, rf.model)
+    # features = ws.forward_select(d1_chi, d1_y_train)
+    # print(features.columns)
 
-    print(features.columns)
-
-    # # Train the model with correlation feature subset
-    # rf.train(d1_chi, d1_y_train)
-    # chi_pred = rf.test(d1_x_test[d1_chi.columns])
-    # acc, prec, rec = rf.score(chi_pred, d1_y_test)
-    # print(f'Accuracy: {acc}\nPrecision: {prec}\nRecall: {rec}')
+    # Train the model with selected subset
+    rf.train(d1_chi, d1_y_train)
+    chi_pred = rf.test(d1_x_test[d1_chi.columns])
+    acc, prec, rec = rf.score(chi_pred, d1_y_test)
+    print(f'Accuracy: {acc}\nPrecision: {prec}\nRecall: {rec}')
 
 if __name__ == "__main__":
     main()
