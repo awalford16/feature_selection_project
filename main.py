@@ -1,14 +1,12 @@
 from preprocessing import read_data
 import os
+import pandas as pd
+from program.fs_process import FSProcess
 
 from preprocessing.data_preprocessing import Data
-from feature_selection.filter_selection import FilterSelection
 from feature_selection.wrapper_selection import WrapperSelection
 from models.forest import Forest
 
-def display_features(model, d1, d2):
-    print(f'{model} Dataset 1 Features: {d1.columns}')
-    print(f'{model} Dataset 2 Features: {d2.columns}')
 
 def main():
     # Read heart disease data into dataframe
@@ -37,48 +35,37 @@ def main():
 
 
     print("---------- Filter Feature Selection ----------")
-    # Create FS object
-    fs = FilterSelection(7)
 
-    # Chi Square
-    # Reduce datasets based on the range of data
-    print('\nChi-Square Feature Selection...')
-    d1_chi = fs.chi2(d1_x_train, d1_y_train)
-    d2_chi = fs.chi2(d2_x_train, d2_y_train)
-    display_features('Chi2', d1_chi, d2_chi)
+    fs_options = ['Chi Square', 'Mutual Information', 'Max Relevance Minimum Redundancy', 'ReliefF']
 
-    # Mutual Information
-    print('\nMutual Information Feature Selection...')
-    d1_mi = fs.mi(d1_x_train, d1_y_train)
-    d2_mi = fs.mi(d2_x_train, d2_y_train)
-    display_features('MI', d1_mi, d2_mi)
+    # Create FS process variable
+    fs = FSProcess(d1_x_train, d1_y_train, d2_x_train, d2_y_train)
 
-    # Mutual Information
-    print('\nmRMR Feature Selection...')
-    # Minimum Redundancy Maximum Relevance
-    d1_mrmr = fs.mrmr(d1_x_train)
-    d2_mrmr = fs.mrmr(d2_x_train)
-    display_features('mRMR', d1_mrmr, d2_mrmr)
+    # Pre-assign variables
+    d1 = d2 = None
 
-    # Mutual Information
-    print('\nReliefF Feature Selection...')
-    d1_rel = fs.rf(d1_x_train, d1_y_train)
-    d2_rel = fs.rf(d2_x_train, d2_y_train)
-    display_features('ReliefF', d1_rel, d2_rel)
+    # Validate d1 and d2 are both dataframes
+    while not isinstance(d1, pd.DataFrame) or not isinstance(d2, pd.DataFrame):
+        for i in range(len(fs_options)):
+            print(f'{i+1}. {fs_options[i]}')
+
+        fs_method = int(input('Select Feature Selection Option: '))
+
+        d1, d2 = fs.exec_fs(fs_method)
 
 
     print('---------- Training with Correlation Data ----------')
     rf = Forest(500, 10)
 
-    print('Using Hybrid Feature Selection...')
+    # print('Using Hybrid Feature Selection...')
     # Option to implement Hybrid feature selection
     # ws = WrapperSelection(5, rf.model)
     # features = ws.forward_select(d1_chi, d1_y_train)
     # print(features.columns)
 
     # Train the model with selected subset
-    rf.train(d1_chi, d1_y_train)
-    chi_pred = rf.test(d1_x_test[d1_chi.columns])
+    rf.train(d1, d1_y_train)
+    chi_pred = rf.test(d1_x_test[d1.columns])
     acc, prec, rec = rf.score(chi_pred, d1_y_test)
     print(f'Accuracy: {acc}\nPrecision: {prec}\nRecall: {rec}')
 
