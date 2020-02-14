@@ -2,6 +2,7 @@ from preprocessing import read_data
 import os
 import pandas as pd
 from program.fs_process import FSProcess
+from program.model_process import ModelProcess
 
 from preprocessing.data_preprocessing import Data
 from feature_selection.wrapper_selection import WrapperSelection
@@ -54,20 +55,28 @@ def main():
         d1, d2 = fs.exec_fs(fs_method)
 
 
-    print('---------- Training with Correlation Data ----------')
-    rf = Forest(500, 10)
+    print('---------- Model Training ----------')
+    # # Choice to apply hybrid feature selection
+    # hybrid = None
+    # while not hybrid == 1 or not hybrid == 2:
+    #     print('1. Train Model with Current Features\n2. Train Model with Hybrid Feature Selection')
+    #     hybrid = int(input('How to train model: '))
 
-    # print('Using Hybrid Feature Selection...')
-    # Option to implement Hybrid feature selection
-    # ws = WrapperSelection(5, rf.model)
-    # features = ws.forward_select(d1_chi, d1_y_train)
-    # print(features.columns)
+    # Choice on classifier
+    model = None
+    while model != 1 and model != 2:
+        print('1. Random Forest\n2. Artificial Neural Network')
+        model = int(input('Select Classification Model: '))
 
-    # Train the model with selected subset
-    rf.train(d1, d1_y_train)
-    chi_pred = rf.test(d1_x_test[d1.columns])
-    acc, prec, rec = rf.score(chi_pred, d1_y_test)
-    print(f'Accuracy: {acc}\nPrecision: {prec}\nRecall: {rec}')
+    # Train model appropriately
+    d1_model = ModelProcess(model, d1, d1_y_train, d1_x_test[d1.columns], d1_y_test)
+    print('\n\nDataset 1:')
+    d1_model.run()
+
+    d2_model = ModelProcess(model, d2, d2_y_train, d2_x_test[d2.columns], d2_y_test)
+    print('\n\nDataset 2:')
+    d2_model.run()
+
 
 if __name__ == "__main__":
     main()
