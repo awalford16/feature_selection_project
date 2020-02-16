@@ -1,9 +1,10 @@
 from preprocessing import read_data
 import os
 import pandas as pd
+
+from plotting import Plot
 from program.fs_process import FSProcess
 from program.model_process import ModelProcess
-
 from preprocessing.data_preprocessing import Data
 from feature_selection.wrapper_selection import WrapperSelection
 from models.forest import Forest
@@ -18,6 +19,11 @@ def main():
     print('Reading in data from Dataset 1 and Dataset 2...')
     d1_data = Data(d1, 'target')
     d2_data = Data(d2, 'cardio')
+
+    # Create data plots
+    plt = Plot()
+    plt.stack_plot(d1_data.data, 'sex', 'target')
+    plt.stack_plot(d2_data.data, 'gender', 'cardio')
 
     # Remove any null values from the data
     d1_data.remove_null_values()
