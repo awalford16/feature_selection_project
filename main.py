@@ -25,17 +25,22 @@ def main():
     plt.stack_plot(d1_data.data, 'sex', 'target')
     plt.stack_plot(d2_data.data, 'gender', 'cardio')
 
-
     # Remove any null values from the data
     d1_data.remove_null_values()
     d2_data.remove_null_values()
+
+    d1_data.remove_outliers(['trestbps', 'chol', 'thalach', 'oldpeak'])
+    d2_data.remove_outliers(['height', 'weight', 'ap_hi', 'ap_lo'])
+
+    plt.rad_plot(d1_data.data, ['trestbps', 'chol', 'thalach', 'oldpeak', 'target'], 'target')
+    plt.rad_plot(d2_data.data, ['height', 'weight', 'ap_hi', 'ap_lo', 'cardio'], 'cardio')
 
     d1_data.normalise()
     d2_data.normalise()
 
     plt.box_plot(d1_data.data, ['trestbps', 'chol', 'thalach', 'oldpeak'], 'target')
-    plt.iso_forest(d2_data.data, 'ap_hi')
-
+    plt.box_plot(d2_data.data, ['height', 'weight', 'ap_hi', 'ap_lo'], 'cardio')
+    
     # Discretize continuous data into categories
     #d1_data.discretize(['trestbps', 'chol', 'thalach', 'oldpeak'], 5)
     #d2_data.discretize(['age', 'height', 'weight', 'ap_hi', 'ap_lo'], 5)

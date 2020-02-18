@@ -1,6 +1,8 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from sklearn.preprocessing import KBinsDiscretizer
+import numpy as np
+from scipy import stats
 
 class Data:
     def __init__(self, data, target):
@@ -26,6 +28,29 @@ class Data:
     def remove_null_values(self):
         print("Found {} null values within dataset.".format(self.data.isnull().sum().sum()))
         self.data.dropna(axis=0)
+
+    # Get outliers
+    def get_outliers(self, cols):
+        df2 = pd.DataFrame(self.data, columns=cols)
+        # th = 3
+        
+        # z_score = np.abs(stats.zscore(df2))
+        # return np.where(z_score > th)[0]
+        q1 = df2.quantile(0.25)
+        q3 = df2.quantile(0.75)
+        iqr = q3 - q1
+
+        outliers = ((df2 < (q1 - 1.5 * iqr)) | (df2 > (q3 + 1.5 * iqr)))
+        df2 = df2[~outliers.any(axis=1)]
+        return df2.index.values.tolist()
+
+
+    # Remove outliers from the dataset
+    def remove_outliers(self, cols):
+        # get index values of rows that contain outliers
+        indices = self.get_outliers(cols)
+        self.data = self.data.loc[indices, :]
+        print(self.data.shape)
 
 
     # Normalise data to have consistent ranges

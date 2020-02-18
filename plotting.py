@@ -42,13 +42,17 @@ class Plot:
 
 
     # Identiy outliers with Isolation Forest
-    def iso_forest(self, df, cols):
-        th = 3
-        z_score = np.abs(stats.zscore(df))
+    def rad_plot(self, df, cols, target_name):
+        df2 = pd.DataFrame(df, columns=cols)
         
-        _, ax = plt.subplots()
-        ax.matshow(z_score)
-        plt.savefig(os.path.join('plots', f'iso_forest_{self.hist_number}.png'), format='png')
+        # Change 0 and 1 values to negative and positive for clarity
+        target = {0: 'Negative', 1: 'Positive'}
+        df2[target_name] = df2[target_name].map(target)
+
+        plt.figure()
+        pd.plotting.radviz(df2, target_name, color=['green', 'red'])
+        plt.savefig(os.path.join('plots', f'rad_{self.hist_number}.png'), format='png')
+        self.hist_number += 1
         plt.close()
 
     # Plot pearson correlation
