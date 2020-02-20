@@ -31,7 +31,7 @@ def main():
 
     data_selector = DataInit(data_files, num_cols, target_names)
 
-    print('---------- Data Preprocessing ----------')
+    print('\n---------- Data Preprocessing ----------')
     x_train = None
     while not isinstance(x_train, pd.DataFrame):
         # Print out possible data files
@@ -49,14 +49,13 @@ def main():
     #plt.box_plot(d2_data.data, ['age', 'height', 'weight', 'ap_hi', 'ap_lo'], 'cardio', 'Dataset 2')
 
 
-    print("---------- Filter Feature Selection ----------")
-
-    # Create FS process variable
+    print("\n---------- Filter Feature Selection ----------")
+    # Create FS object
     fs = FeatureSelection(x_train, y_train, 7)
     fs.exec_fs()
 
 
-    print('---------- Model Training ----------')
+    print('\n---------- Model Training ----------')
     # Choice on classifier
     model = None
     while model != 1 and model != 2:

@@ -32,6 +32,7 @@ class PreProcessing:
         print("Found {} null values within dataset.".format(self.data.isnull().sum().sum()))
         self.data.dropna(axis=0)
 
+
     # Get outliers
     def get_outliers(self, cols):
         df2 = pd.DataFrame(self.data, columns=cols)
