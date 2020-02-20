@@ -33,9 +33,10 @@ class Plot:
 
 
     # Box plot numerical data with target
-    def box_plot(self, df, cols, target):
+    def box_plot(self, df, cols, target, title):
         plt.figure()
         df.boxplot(column=cols)
+        plt.suptitle(title)
         plt.savefig(os.path.join('plots', f'boxplots_{self.box_number}.png'), format='png')
         self.box_number += 1
         plt.close()
@@ -50,7 +51,7 @@ class Plot:
         df2[target_name] = df2[target_name].map(target)
 
         plt.figure()
-        pd.plotting.radviz(df2, target_name, color=['green', 'red'])
+        pd.plotting.radviz(df2, target_name, color=['green', 'blue'])
         plt.savefig(os.path.join('plots', f'rad_{self.hist_number}.png'), format='png')
         self.hist_number += 1
         plt.close()
@@ -67,6 +68,7 @@ class Plot:
         ax.set_xticklabels(names, rotation=90)
         ax.set_yticklabels(names)
         plt.savefig(os.path.join('plots','corr.png'))
+        plt.close()
 
     # Create bar chart for p-values of chi-square results
     def plot_chi(self, p_values):
@@ -74,3 +76,4 @@ class Plot:
         plt.figure(2)
         p_values.plot.bar(rot=0)
         plt.savefig(os.path.join('plots', 'chi_pvalues.png'))
+        plt.close()
