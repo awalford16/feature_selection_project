@@ -4,10 +4,14 @@ from sklearn.preprocessing import KBinsDiscretizer
 import numpy as np
 from scipy import stats
 
-class Data:
+class PreProcessing:
     def __init__(self, data, target):
         self.data = data
         self.target_name = target
+        self.x_train = None
+        self.y_train = None
+        self.x_test = None
+        self.y_test = None
 
     # Split the data into train and test portions
     def split_data(self, split):
@@ -20,8 +24,7 @@ class Data:
         split_percent = int(split * 100)
         print('Splitting data into {}% train and {}% test'.format(100 - split_percent, split_percent))
         
-        train_x, test_x, train_y, test_y = train_test_split(feature_data, target, test_size=split)
-        return train_x, test_x, train_y, test_y 
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(feature_data, target, test_size=split)
 
 
     # Remove null values found in columns and rows from dataset
