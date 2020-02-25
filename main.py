@@ -68,7 +68,7 @@ def main():
         columns = fs.feature_sets[subset]
 
         # Train and test model using relative columns
-        print(f"\n\n{subset} Model Accuracies: ")
+        print(f"\n\n{subset} model accuracies: ")
         d1_model = ModelProcess(model, x_train[columns], y_train, x_test[columns], y_test)
         d1_model.run()
 
