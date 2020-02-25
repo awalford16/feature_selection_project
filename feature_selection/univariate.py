@@ -3,6 +3,9 @@ import pandas as pd
 from plotting import Plot
 
 class UnivariateSelection:
+    def __init__(self, k):
+        self.k = k
+
     # Chi Square Feature Selection
     def chi_square_selection(self, data, target_data):
         # Calculate chi scores for each feature
@@ -13,7 +16,7 @@ class UnivariateSelection:
 
         # Plot p-values to visualise which are more valuable columns
         chi_plt = Plot()
-        chi_plt.plot_chi(p_values)
+        chi_plt.plot_fs(p_values, 'chi-square', 'Dataset 2 Chi-Square P-Values')
         del chi_plt
 
         # Drop features below threshold (95% confidence, set alpha = 0.05)
@@ -22,6 +25,12 @@ class UnivariateSelection:
 
     # Mutual Information Feature Selection
     def mi_selection(self, data, target_data):
+        mi = pd.Series(fs.mutual_info_classif(data, target_data), index=data.columns)
+
+        mi_plt = Plot()
+        mi_plt.plot_fs(mi, 'mutual_info', 'Dataset 2 MI Feature Scores')
+        del mi_plt
+
         return self.selector(fs.mutual_info_classif, data, target_data)
         
     
@@ -31,8 +40,6 @@ class UnivariateSelection:
 
         # Get name of columns to keep
         cols = selector.get_support(indices=True)
-
-        print(cols)
 
         # Overwrite exisitng dataframe with selected columns
         return data[data.columns[cols]]

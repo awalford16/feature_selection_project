@@ -31,7 +31,7 @@ def main():
 
     data_selector = DataInit(data_files, num_cols, target_names)
 
-    print('\n---------- Data Preprocessing ----------')
+    print('\n---------- Datasets ----------')
     x_train = None
     while not isinstance(x_train, pd.DataFrame):
         # Print out possible data files
@@ -62,10 +62,15 @@ def main():
         print('1. Random Forest\n2. Artificial Neural Network')
         model = int(input('Select Classification Model: '))
 
-    # Train model appropriately
-    columns = fs.feature_sets['chi-square']
-    d1_model = ModelProcess(model, x_train[columns], y_train, x_test[columns], y_test)
-    d1_model.run()
+    # Loop through each feature subset
+    for subset in fs.feature_sets.keys():
+        # Get relative columns
+        columns = fs.feature_sets[subset]
+
+        # Train and test model using relative columns
+        print(f"\n\n{subset} Model Accuracies: ")
+        d1_model = ModelProcess(model, x_train[columns], y_train, x_test[columns], y_test)
+        d1_model.run()
 
 
 if __name__ == "__main__":

@@ -71,9 +71,13 @@ class Plot:
         plt.close()
 
     # Create bar chart for p-values of chi-square results
-    def plot_chi(self, p_values):
+    def plot_fs(self, values, name, title):
         # Number figures for multiple plots
         plt.figure(2)
-        p_values.plot.bar(rot=0)
-        plt.savefig(os.path.join('plots', 'chi_pvalues.png'))
+        values = values.sort_values()
+        values.plot.bar(rot=45)
+        plt.title(title)
+        plt.xlabel('Feature')
+        plt.ylabel('Score')
+        plt.savefig(os.path.join('plots', f'{name}.png'))
         plt.close()
