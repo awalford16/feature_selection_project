@@ -2,12 +2,10 @@ import os
 import pandas as pd
 
 from plotting import Plot
-from program.fs_process import FSProcess
-from program.model_process import ModelProcess
+from models.classification import Classification
 from data_process.data import DataInit
 from feature_selection.feature_select import FeatureSelection
 from feature_selection.wrapper_selection import WrapperSelection
-from models.forest import Forest
 
 
 def main():
@@ -69,7 +67,7 @@ def main():
 
         # Train and test model using relative columns
         print(f"\n\n{subset} model accuracies: ")
-        d1_model = ModelProcess(model, x_train[columns], y_train, x_test[columns], y_test)
+        d1_model = Classification(model, x_train[columns], y_train, x_test[columns], y_test)
         d1_model.run()
 
 
