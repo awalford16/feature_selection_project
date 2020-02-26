@@ -60,6 +60,7 @@ def main():
         print('1. Random Forest\n2. Artificial Neural Network')
         model = int(input('Select Classification Model: '))
 
+    print('\n---------- Performance Scores ----------')
     # Loop through each feature subset
     for subset in fs.feature_sets.keys():
         # Get relative columns
