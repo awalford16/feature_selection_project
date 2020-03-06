@@ -1,6 +1,7 @@
 from sklearn import metrics
 from models.ann import NeuralNet
 from models.forest import Forest
+import matplotlib as plt
 
 # Create abstract class for classification models
 class Classification:
@@ -16,24 +17,16 @@ class Classification:
         elif model == 2:
             self.model = NeuralNet(500).model
     
-    # Select classification model
-
 
     # Train classification model
     def train_model(self):
         self.model.fit(self.xtrain, self.ytrain)
 
+
     # Predict future data
     def test_model(self):
         return self.model.predict(self.xtest)
 
-    # Calculate precision and recall for 
-    def score(self, y_test, y_pred):
-        acc = metrics.accuracy_score(y_test, y_pred)
-        sens = metrics.precision_score(y_test, y_pred)
-        recall = metrics.recall_score(y_test, y_pred)
-
-        return acc, sens, recall
 
     # Model learning process
     def run(self):
@@ -42,9 +35,24 @@ class Classification:
 
         pred = self.test_model()
 
-        acc, spec, sens = self.score(self.ytest, pred)
-        self.print_results(acc, spec, sens)
-    
+        acc, spec, sens = self.score(pred)
+        self.print_results(acc, spec, sens)   
+
+        
+    # Calculate precision and recall for 
+    def score(self, pred):
+        acc = metrics.accuracy_score(self.ytest, pred)
+
+        # Get true positives/negatives and false positives/negatives
+        tn, fp, fn, tp = metrics.confusion_matrix(self.ytest, pred).ravel()
+
+        # Perform sensitivity and specificity calculations   
+        sens = tp / (tp + fn)
+        spec = tn / (tn + fp)
+
+        return acc, spec, sens          
+
+
     # Print model results
     def print_results(self, acc, spec, sens):
-        print(f'Accuracy: {acc}\nSpecificity: {spec}\nSensitivity: {sens}')
+        print(f'Accuracy: {acc:.2f}\nSpecificity: {spec:.2f}\nSensitivity: {sens:.2f}')
