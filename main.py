@@ -49,7 +49,7 @@ def main():
 
     print("\n---------- Filter Feature Selection ----------")
     # Create FS object
-    fs = FeatureSelection(x_train, y_train, 7)
+    fs = FeatureSelection(x_train, y_train, 9)
     fs.exec_fs()
 
 
@@ -63,13 +63,17 @@ def main():
     print('\n---------- Performance Scores ----------')
     # Loop through each feature subset
     for subset in fs.feature_sets.keys():
-        # Get relative columns
-        columns = fs.feature_sets[subset]
+        
+        print(f"\n\n{subset} model accuracies: ")
+        # Use different subset sizes with a minimum of 5 features
+        for subset_size in range(5, fs.k + 1):
+            print(f"\nFeature Subset Size: {subset_size}")
+            # Get relative columns
+            columns = fs.feature_sets[subset][:subset_size]
 
-        # Train and test model using relative columns
-        print(f"{subset} model accuracies: ")
-        d1_model = Classification(model, x_train[columns], y_train, x_test[columns], y_test)
-        d1_model.run()
+            # Train and test model using relative columns
+            d1_model = Classification(model, x_train[columns], y_train, x_test[columns], y_test)
+            d1_model.run()
 
 
 if __name__ == "__main__":
