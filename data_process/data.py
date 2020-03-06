@@ -38,7 +38,7 @@ class DataInit:
         processor.remove_outliers(cols)
 
         # Normalise the data
-        processor.normalise(cols)
+        processor.normalise()
 
         # Split the data 25%
         processor.split_data(0.25)
