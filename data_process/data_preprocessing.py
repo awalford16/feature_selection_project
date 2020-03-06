@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import KBinsDiscretizer
 import numpy as np
 from scipy import stats
+from plotting import Plot
 
 class PreProcessing:
     def __init__(self, data, target):
@@ -54,15 +55,20 @@ class PreProcessing:
         # get index values of rows that contain outliers
         indices = self.get_outliers(cols)
         self.data = self.data.loc[indices, :]
-        print(self.data.shape)
+        print(f"{self.data.shape[0]} Records kept.")
 
 
     # Normalise data to have consistent ranges
-    def normalise(self):
+    def normalise(self, cols):
         data_min = self.data.min()
         data_max = self.data.max()
 
         self.data = ((self.data - data_min) / (data_max - data_min))
+
+        # Plot new RadVis and box plots
+        data_plt = Plot()
+        data_plt.box_plot(self.data, cols, self.target_name, 'Dataset 2')
+        data_plt.rad_plot(self.data, cols, self.target_name, 'Dataset 2')
 
 
     # Discretize continuous data to nominal data

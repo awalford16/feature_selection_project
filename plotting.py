@@ -43,7 +43,8 @@ class Plot:
 
 
     # Identiy outliers with Isolation Forest
-    def rad_plot(self, df, cols, target_name):
+    def rad_plot(self, df, cols, target_name, title):
+        cols.append(target_name)
         df2 = pd.DataFrame(df, columns=cols)
         
         # Change 0 and 1 values to negative and positive for clarity
@@ -52,6 +53,7 @@ class Plot:
 
         plt.figure()
         pd.plotting.radviz(df2, target_name, color=['green', 'blue'])
+        plt.suptitle(title)
         plt.savefig(os.path.join('plots', f'rad_{self.hist_number}.png'), format='png')
         self.hist_number += 1
         plt.close()
