@@ -13,30 +13,31 @@ class Classification:
         self.ytest = y_test
 
         if model == 1:
-            self.model = Forest(500, 10).model
+            self.model = Forest(500)
         elif model == 2:
-            self.model = NeuralNet(500).model
+            self.model = NeuralNet()
     
 
     # Train classification model
     def train_model(self):
-        self.model.fit(self.xtrain, self.ytrain)
+        self.model.model.fit(self.xtrain, self.ytrain)
 
 
     # Predict future data
     def test_model(self):
-        return self.model.predict(self.xtest)
+        return self.model.model.predict(self.xtest)
 
 
     # Model learning process
     def run(self):
-        # TODO: Perform cross validation
-        self.train_model()
+        for val in self.model.hyper_params:
+            self.model.set_hyper_params(val)
+            self.train_model()
 
-        pred = self.test_model()
+            pred = self.test_model()
 
-        acc, spec, sens = self.score(pred)
-        self.print_results(acc, spec, sens)   
+            acc, spec, sens = self.score(pred)
+            self.print_results(acc, spec, sens)   
 
         
     # Calculate precision and recall for 
