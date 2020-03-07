@@ -8,5 +8,5 @@ class NeuralNet:
 
     def set_hyper_params(self, val):
         print(f'{val} hidden layers.')
-        self.model.set_params(hidden_layer_size=val)
+        self.model.set_params(hidden_layer_sizes=val)
 
