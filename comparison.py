@@ -16,6 +16,8 @@ class Comparison:
             self.acc = model.acc
             self.sens = model.sens
             self.spec = model.spec
+        
+        # If scores are equal, select smaller subset
         elif (model_score == current_best and (len(subset) < len(self.best_subset))):
             self.best_method = fs
             self.best_subset = subset
