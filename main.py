@@ -65,7 +65,7 @@ def main():
         print(f"\n\n{subset} Feature Selection")
         # Use different subset sizes with a minimum of 5 features
         for subset_size in range(5, fs.k + 1):
-            print(f"\nFeature Subset Size: {subset_size}")
+            print(f"Testing with {subset_size} features...")
             # Get relative columns
             columns = fs.feature_sets[subset][:subset_size]
 
@@ -74,6 +74,8 @@ def main():
             classifier.run()
             
             c.compare(subset, columns, classifier)
+
+        c.display_method_result(subset)
 
     c.display_results()
 

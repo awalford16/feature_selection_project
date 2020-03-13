@@ -6,7 +6,17 @@ class Comparison:
         self.sens = 0
         self.spec = 0
 
+        self.fs_method_best = {}
+
+
+
     def compare(self, fs, subset, model):
+        is_best_method = self.compare_method(fs, len(subset), model)
+
+        # If it is not the best scores produced from that method then will not be best overall
+        if not is_best_method:
+            return None
+
         current_best = self.acc + self.sens
         model_score = model.acc + model.sens
 
@@ -25,6 +35,40 @@ class Comparison:
             self.sens = model.sens
             self.spec = model.spec
 
+
+    def compare_method(self, fs, subset, model):
+        if fs not in self.fs_method_best:
+            self.fs_method_best[fs] = {
+                'subset': subset,
+                'acc': model.acc,
+                'sens': model.sens,
+                'spec': model.spec
+            }
+            return True
+        
+        current_best = self.fs_method_best[fs]['acc'] + self.fs_method_best[fs]['sens']
+        model_score = model.acc + model.sens
+
+        if model_score > current_best:
+            self.fs_method_best[fs] = {
+                'subset': subset,
+                'acc': model.acc,
+                'sens': model.sens,
+                'spec': model.spec
+            }
+            return True
+
+        return False
+
+
+    def display_method_result(self, fs):
+        results = self.fs_method_best[fs]
+        print(f'\n\n{fs} best results with {results["subset"]} features:')
+        print(f'Accuracy: {(results.get("acc") * 100):.2f}%')
+        print(f'Sensitivity: {(results.get("sens") * 100):.2f}%')
+        print(f'Specificity: {(results.get("spec") * 100):.2f}%')
+
+    # Display best overall results
     def display_results(self):
         print(f'\n\nBest Feature Selection Method: {self.best_method}')
         print(f'Best Feature Subset: {self.best_subset}')

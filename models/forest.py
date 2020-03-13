@@ -7,5 +7,5 @@ class Forest:
         self.hyper_params = [5, 10, 20, 50]
 
     def set_hyper_params(self, val):
-        print(f'{val} samples per leaf.')
+        #print(f'{val} samples per leaf.')
         self.model.set_params(min_samples_leaf=val)
