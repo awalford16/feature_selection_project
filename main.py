@@ -6,6 +6,7 @@ from models.classification import Classification
 from data_process.data import DataInit
 from feature_selection.feature_select import FeatureSelection
 from feature_selection.wrapper_selection import WrapperSelection
+from comparison import Comparison
 
 
 def main():
@@ -40,13 +41,6 @@ def main():
         x_train, x_test, y_train, y_test = data_selector.select_dataset(choice)
 
 
-    #plt.rad_plot(d1_data.data, ['age', 'trestbps', 'chol', 'thalach', 'oldpeak', 'target'], 'target')
-    #plt.rad_plot(d2_data.data, ['age', 'height', 'weight', 'ap_hi', 'ap_lo', 'cardio'], 'cardio')
-
-    #plt.box_plot(d1_data.data, ['age', 'trestbps', 'chol', 'thalach', 'oldpeak'], 'target', 'Dataset 1')
-    #plt.box_plot(d2_data.data, ['age', 'height', 'weight', 'ap_hi', 'ap_lo'], 'cardio', 'Dataset 2')
-
-
     print("\n---------- Filter Feature Selection ----------")
     # Create FS object
     fs = FeatureSelection(x_train, y_train, 9)
@@ -60,11 +54,15 @@ def main():
         print('1. Random Forest\n2. Artificial Neural Network')
         model = int(input('Select Classification Model: '))
 
+
     print('\n---------- Performance Scores ----------')
+    # Init comparison class to compare results
+    c = Comparison()
+
     # Loop through each feature subset
     for subset in fs.feature_sets.keys():
         
-        print(f"\n\n{subset} model accuracies: ")
+        print(f"\n\n{subset} Feature Selection")
         # Use different subset sizes with a minimum of 5 features
         for subset_size in range(5, fs.k + 1):
             print(f"\nFeature Subset Size: {subset_size}")
@@ -72,8 +70,13 @@ def main():
             columns = fs.feature_sets[subset][:subset_size]
 
             # Train and test model using relative columns
-            d1_model = Classification(model, x_train[columns], y_train, x_test[columns], y_test)
-            d1_model.run()
+            classifier = Classification(model, x_train[columns], y_train, x_test[columns], y_test)
+            classifier.run()
+            
+            c.compare(subset, columns, classifier)
+
+    c.display_results()
+
 
 
 if __name__ == "__main__":

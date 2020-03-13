@@ -11,6 +11,11 @@ class Classification:
         self.ytrain = y_train
         self.xtest = x_test
         self.ytest = y_test
+        
+        # Performance scores
+        self.acc = 0
+        self.sens = 0
+        self.spec = 0
 
         if model == 1:
             self.model = Forest(500)
@@ -36,24 +41,21 @@ class Classification:
 
             pred = self.test_model()
 
-            acc, spec, sens = self.score(pred)
-            self.print_results(acc, spec, sens)   
+            self.score(pred)  
 
         
     # Calculate precision and recall for 
     def score(self, pred):
-        acc = metrics.accuracy_score(self.ytest, pred)
+        self.acc = metrics.accuracy_score(self.ytest, pred)
 
         # Get true positives/negatives and false positives/negatives
         tn, fp, fn, tp = metrics.confusion_matrix(self.ytest, pred).ravel()
 
         # Perform sensitivity and specificity calculations   
-        sens = tp / (tp + fn)
-        spec = tn / (tn + fp)
-
-        return acc, spec, sens          
+        self.sens = tp / (tp + fn)
+        self.spec = tn / (tn + fp)        
 
 
     # Print model results
-    def print_results(self, acc, spec, sens):
-        print(f'Accuracy: {acc:.2f}\nSpecificity: {spec:.2f}\nSensitivity: {sens:.2f}')
+    def print_results(self):
+        print(f'Accuracy: {self.acc:.2f}\nSpecificity: {self.spec:.2f}\nSensitivity: {self.sens:.2f}')
