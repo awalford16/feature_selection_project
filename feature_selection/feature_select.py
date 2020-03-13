@@ -1,4 +1,5 @@
 from feature_selection.filter_selection import FilterSelection
+import pandas as pd
 
 class FeatureSelection:
     def __init__(self, x, y, k):
@@ -8,7 +9,7 @@ class FeatureSelection:
         self.y = y
 
     def display_features(self, model, features):
-        print(f'{model} Features: {features}')
+        print(f'{model} Features: {features.values}')
 
     # Create function based switch method for selecting fs method
     def exec_fs(self):
@@ -23,7 +24,7 @@ class FeatureSelection:
         }
 
         for method in fs_methods:
-            print(f'Executing {method} selection')
+            print(f'\nExecuting {method} selection')
             subset = (fs_methods[method]).columns
             self.feature_sets[method] = subset
             self.display_features(method, subset)
