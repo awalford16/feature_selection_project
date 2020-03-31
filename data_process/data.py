@@ -21,6 +21,10 @@ class DataInit:
         # Read in dataset
         df = read_data.csv_to_df(os.path.join('data', self.datasets[choice - 1]), sep)
 
+        # drop id column form dataset 2
+        if (choice == 2):
+            df.drop(columns=['id'])
+
         # pass in selected dataset with name of target column
         processor = PreProcessing(df, self.targets[choice - 1])
         self.process_data(processor, self.numerical_cols[choice - 1])

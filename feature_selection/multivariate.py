@@ -1,5 +1,6 @@
 import pymrmr
 from ReliefF import ReliefF as rf
+import numpy as np
 
 class MultivariateSelection():
     def __init__(self, k):
@@ -13,8 +14,8 @@ class MultivariateSelection():
     # Feature selection using ReliefF algorithm    
     def relief_selection(self, data, target_data):
         w = rf(n_features_to_keep=self.k)
-
         w.fit(data, target_data)
-
-        return w.top_features[:self.k]
+        
+        # absolute so all scores are positive
+        return w.feature_scores
 

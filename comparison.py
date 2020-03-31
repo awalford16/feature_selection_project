@@ -63,10 +63,11 @@ class Comparison:
 
     def display_method_result(self, fs):
         results = self.fs_method_best[fs]
-        print(f'\n\n{fs} best results with {results["subset"]} features:')
+        print(f'\n{fs} best results with {results["subset"]} features:')
         print(f'Accuracy: {(results.get("acc") * 100):.2f}%')
         print(f'Sensitivity: {(results.get("sens") * 100):.2f}%')
         print(f'Specificity: {(results.get("spec") * 100):.2f}%')
+
 
     # Display best overall results
     def display_results(self):

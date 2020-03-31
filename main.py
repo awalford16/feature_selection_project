@@ -43,7 +43,7 @@ def main():
 
     print("\n---------- Filter Feature Selection ----------")
     # Create FS object
-    fs = FeatureSelection(x_train, y_train, 9)
+    fs = FeatureSelection(x_train, y_train, 7)
     fs.exec_fs()
 
 
@@ -63,18 +63,16 @@ def main():
     for subset in fs.feature_sets.keys():
         
         print(f"\n\n{subset} Feature Selection")
-        # Use different subset sizes with a minimum of 5 features
-        for subset_size in range(5, fs.k + 1):
-            print(f"Testing with {subset_size} features...")
-            # Get relative columns
-            columns = fs.feature_sets[subset][:subset_size]
 
-            # Train and test model using relative columns
-            classifier = Classification(model, x_train[columns], y_train, x_test[columns], y_test)
-            classifier.run()
-            
-            c.compare(subset, columns, classifier)
+        # Get relative columns
+        columns = fs.feature_sets[subset]
 
+        # Train and test model using relative columns
+        classifier = Classification(model, x_train[columns], y_train, x_test[columns], y_test)
+        classifier.run()
+        
+        # Compare and display results
+        c.compare(subset, columns, classifier)
         c.display_method_result(subset)
 
     c.display_results()

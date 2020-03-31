@@ -19,8 +19,10 @@ class UnivariateSelection:
         chi_plt.plot_fs(p_values, 'chi-square', 'Dataset 2 Chi-Square P-Values')
         del chi_plt
 
+        return p_values
+
         # Drop features below threshold (95% confidence, set alpha = 0.05)
-        return self.selector(fs.chi2, data, target_data)
+        #return self.selector(fs.chi2, data, target_data)
 
 
     # Mutual Information Feature Selection
@@ -31,7 +33,10 @@ class UnivariateSelection:
         mi_plt.plot_fs(mi, 'mutual_info', 'Dataset 2 MI Feature Scores')
         del mi_plt
 
-        return self.selector(fs.mutual_info_classif, data, target_data)
+        print(mi)
+
+        return mi
+        # return self.selector(fs.mutual_info_classif, data, target_data)
         
     
     def selector(self, method, data, target_data):
