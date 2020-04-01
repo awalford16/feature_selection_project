@@ -1,4 +1,5 @@
 from sklearn import metrics
+from sklearn.model_selection import cross_val_score
 from models.ann import NeuralNet
 from models.forest import Forest
 import matplotlib as plt
@@ -35,13 +36,27 @@ class Classification:
 
     # Model learning process
     def run(self):
+        # Initialise best hyper-parameter values
+        best_params = self.model.hyper_params[0]
+        best_score = 0
+
         for val in self.model.hyper_params:
             self.model.set_hyper_params(val)
-            self.train_model()
+            
+            # Predict accuracy score with cross-validation
+            val_scores = cross_val_score(self.model.model, self.xtrain, self.ytrain, cv=5)
 
-            pred = self.test_model()
+            # Determine best hyper-parameters
+            if val_scores.mean() > best_score:
+                best_score = val_scores.mean()
+                best_params = val
 
-            self.score(pred)  
+        print(f"Best hyper-parameter value: {best_params}")
+        self.model.set_hyper_params(best_params)
+        self.train_model()
+
+        pred = self.test_model()
+        self.score(pred)  
 
         
     # Calculate precision and recall for 

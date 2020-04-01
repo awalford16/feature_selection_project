@@ -36,7 +36,6 @@ class FilterSelection():
         for i in range(len(scores)):
             # If the value doesnt meet the threshold, append to list of columns to drop
             if compare(scores[i], threshold):
-                print(f'{scores[i]}')
                 drop_columns.append(data.columns[i])
 
         return data.drop(columns=drop_columns)
