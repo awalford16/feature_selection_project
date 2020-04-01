@@ -4,6 +4,7 @@ import numpy as np
 import operator
 from feature_selection.multivariate import MultivariateSelection
 from feature_selection.univariate import UnivariateSelection
+from plotting import Plot
 
 # Facade pattern class to encapsulate different feature selection functionality
 class FilterSelection():
@@ -22,20 +23,27 @@ class FilterSelection():
 
     def rf(self, data, target_data):
         feature_scores = self.ms.relief_selection(data.to_numpy(), target_data.to_numpy())
-        return self.drop_columns(data, feature_scores, operator.gt, 500)
+
+        # Plot relieff scores
+        relief_plot = Plot()
+        scores = pd.Series(feature_scores, index=data.columns)
+        relief_plot.plot_fs(scores, "ReliefF", 'Dataset 1 ReliefF Scores')
+        del relief_plot
+
+        return self.drop_columns(data, feature_scores, operator.gt, 800)
 
     def mrmr(self, data):
         return self.ms.mrmr_selection(data)
 
 
-    # Function to drop columns
+    # Drop columns from dataset which dont surpass statistical threshold
     def drop_columns(self, data, scores, compare, threshold):
         drop_columns = []
 
         # Loop through each of the IG values (Ignore last value (target variable))
         for i in range(len(scores)):
             # If the value doesnt meet the threshold, append to list of columns to drop
-            if compare(scores[i], threshold):
+            if not compare(scores[i], threshold):
                 drop_columns.append(data.columns[i])
 
         return data.drop(columns=drop_columns)

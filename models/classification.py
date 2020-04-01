@@ -1,5 +1,6 @@
 from sklearn import metrics
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import GridSearchCV
+import warnings
 from models.ann import NeuralNet
 from models.forest import Forest
 import matplotlib as plt
@@ -18,10 +19,12 @@ class Classification:
         self.sens = 0
         self.spec = 0
 
-        if model == 1:
-            self.model = Forest(500)
-        elif model == 2:
-            self.model = NeuralNet()
+        self.model_type = model
+
+        self.model = self.create_model(50)
+
+        # Ignore warnings from Scikitlearn
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
     
 
     # Train classification model
@@ -33,27 +36,25 @@ class Classification:
     def test_model(self):
         return self.model.model.predict(self.xtest)
 
+    
+    # Create a classification model
+    def create_model(self, params):
+        if self.model_type == 1:
+            return Forest(params)
+        if self.model_type == 2:
+            return NeuralNet(params)
+
+        return None
+
 
     # Model learning process
     def run(self):
-        # Initialise best hyper-parameter values
-        best_params = self.model.hyper_params[0]
-        best_score = 0
+        # GridSearch identifies the best hyper-parameters for a given model
+        grid_search = GridSearchCV(self.model.model, self.model.hyper_params, cv=5)
+        best_model = grid_search.fit(self.xtrain, self.ytrain)
 
-        for val in self.model.hyper_params:
-            self.model.set_hyper_params(val)
-            
-            # Predict accuracy score with cross-validation
-            val_scores = cross_val_score(self.model.model, self.xtrain, self.ytrain, cv=5)
-
-            # Determine best hyper-parameters
-            if val_scores.mean() > best_score:
-                best_score = val_scores.mean()
-                best_params = val
-
-        print(f"Best hyper-parameter value: {best_params}")
-        self.model.set_hyper_params(best_params)
-        self.train_model()
+        print(f"Best Hyper-Parameter Value: {best_model.best_estimator_.get_params()['min_samples_leaf']}.")
+        self.model.model = best_model.best_estimator_
 
         pred = self.test_model()
         self.score(pred)  

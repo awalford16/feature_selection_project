@@ -32,9 +32,7 @@ class UnivariateSelection:
         mi_plt = Plot()
         mi_plt.plot_fs(mi, 'mutual_info', 'Dataset 2 MI Feature Scores')
         del mi_plt
-
-        print(mi)
-
+        
         return mi
         # return self.selector(fs.mutual_info_classif, data, target_data)
         
